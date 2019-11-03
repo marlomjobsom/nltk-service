@@ -1,0 +1,20 @@
+version: "2"
+
+services:
+    nltk_service:
+        build:
+            dockerfile: Dockerfile
+            context: ./
+        image: nltk_service:dc
+        container_name: nltk_service
+        ports:
+          - "$PORT:$PORT"
+        environment:
+          - PORT
+          - TOKEN
+        volumes:
+        - vdb:/opt/nltk_service/database
+
+volumes:
+    vdb:
+        external: false

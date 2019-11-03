@@ -1,0 +1,11 @@
+# folders
+.idea
+__pycache__
+database
+test_coverage_report
+venv
+
+# files
+*.pyc
+*.swp
+.coverage

@@ -1,0 +1,12 @@
+[run]
+omit =
+    tests/*
+    */site-packages/*
+
+[report]
+exclude_lines =
+    def flask_app
+    def run
+    def __build_url
+    if __name__ == '__main__':
+    elif __name__ == 'uwsgi_file_app':

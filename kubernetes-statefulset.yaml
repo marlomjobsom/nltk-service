@@ -1,0 +1,96 @@
+# StatefulSet definition
+apiVersion: apps/v1
+kind: StatefulSet
+
+metadata:
+  name: nltk-service
+  labels:
+    app: nltk-service
+
+spec:
+  serviceName: nltk-service
+  replicas: 1
+  updateStrategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: nltk-service
+  template:
+    metadata:
+      labels:
+        app: nltk-service
+    spec:
+      containers:
+      - name: nltk-service
+        image: $$NLTK_SERVICE_IMAGE
+        command: ["uwsgi"]
+        args: [
+          "--master",
+          "--https", ":$$PORT,./certificates/nltk_service.crt,./certificates/nltk_service.key,HIGH",
+          "--processes", "4",
+          "--threads", "4",
+          "--wsgi-file", "app.py",
+          "--pyargv", "--admin_token=$$TOKEN"]
+        ports:
+        - containerPort: $$PORT
+        volumeMounts:
+        - mountPath: /opt/nltk_service/database
+          name: nltk-service-volume
+      volumes:
+        - name: nltk-service-volume
+          persistentVolumeClaim:
+            claimName: nltk-service-pvc
+
+---
+
+# HorizontalPodAutoscaler definition
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+
+metadata:
+  name: nltk-service
+  labels:
+    app: nltk-service
+
+spec:
+  scaleTargetRef:
+    kind: StatefulSet
+    name: nltk-service
+    apiVersion: apps/v1
+  minReplicas: 1
+  maxReplicas: 2
+
+---
+
+# Service definition
+apiVersion: v1
+kind: Service
+
+metadata:
+  name: nltk-service
+  labels:
+    run: nltk-service
+
+spec:
+  ports:
+  - port: $$PORT
+    targetPort: $$PORT
+  selector:
+    app: nltk-service
+  type: LoadBalancer
+
+---
+
+# PersistentVolumeClaim definition
+apiVersion: v1
+kind: PersistentVolumeClaim
+
+metadata:
+  name: nltk-service-pvc
+
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
