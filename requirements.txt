@@ -2,7 +2,7 @@ Werkzeug==0.16.0
 nltk==3.4.5
 Flask==1.0.2
 peewee==3.11.2
-requests==2.19.1
+requests==2.20.0
 uWSGI==2.0.17.1
 numpy==1.15.4
 python-dotenv==0.10.3
