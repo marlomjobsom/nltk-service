@@ -162,17 +162,18 @@ kubectl get pods
 kubectl describe service nltk-service | grep 'LoadBalancer Ingress'
 
 # PS: How to delete the deployment
-cat kubernetes-statefulset.yaml | sed \
-    -e "s/\$\$PORT/$PORT/" \
-    -e "s/\$\$TOKEN/$TOKEN/" \
-    -e "s/\$\$NLTK_SERVICE_IMAGE/$NLTK_SERVICE_IMAGE/" | \
-    kubectl delete -f -
+# cat kubernetes-statefulset.yaml | sed \
+#     -e "s/\$\$PORT/$PORT/" \
+#     -e "s/\$\$TOKEN/$TOKEN/" \
+#     -e "s/\$\$NLTK_SERVICE_IMAGE/$NLTK_SERVICE_IMAGE/" | \
+#     kubectl delete -f -
 ```
 
 #### Getting service external IP for `minikube` deployment
 > On cloud providers that support load balancers, an external IP address would be provisioned to access the Service. 
 > On Minikube, the LoadBalancer type makes the Service accessible through the minikube service command.
-> * [Hello Minikube - Kubernetes<](https://kubernetes.io/docs/tutorials/hello-minikube/)
+>
+> * [Hello Minikube - Kubernetes](https://kubernetes.io/docs/tutorials/hello-minikube/)
 
 ```shell script
 minikube service nltk-service
