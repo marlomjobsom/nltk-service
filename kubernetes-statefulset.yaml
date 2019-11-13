@@ -43,25 +43,6 @@ spec:
 
 ---
 
-# HorizontalPodAutoscaler definition
-apiVersion: autoscaling/v1
-kind: HorizontalPodAutoscaler
-
-metadata:
-  name: nltk-service
-  labels:
-    app: nltk-service
-
-spec:
-  scaleTargetRef:
-    kind: StatefulSet
-    name: nltk-service
-    apiVersion: apps/v1
-  minReplicas: 1
-  maxReplicas: 2
-
----
-
 # Service definition
 apiVersion: v1
 kind: Service

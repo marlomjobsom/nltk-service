@@ -4,8 +4,9 @@ It allows non-Python based projects to use NLTK python library.
 ## Requirements
 * Python 3.7.4
 * Docker
+* Docker Composer
 * VirtualBox
-* Kubernetes
+* Kubectl
 * Minikube
 
 ## Development 
@@ -28,7 +29,7 @@ python -c "import nltk; \
     nltk.download('words')"
 ```
 
-### Running unittests
+### Running tests
 ```shell script
 # Runs with no code coverage
 python -m unittest discover -v
@@ -57,7 +58,7 @@ openssl x509 -req -days 365 -in nltk_service.csr -signkey nltk_service.key -out 
 # At the end, it will be generated the three files: nltk_service.crt, nltk_service.csr, nltk_service.key
 ```
 
-### `uWSGI`
+### uWSGI
 ```shell script
 # Defining the parameters to run the service
 export TOKEN=`echo $(date) | md5sum | cut -f 1 -d "-"`
@@ -67,10 +68,13 @@ export PORT=[PORT]
 echo $TOKEN
 
 uwsgi --master --https :$PORT,./certificates/nltk_service.crt,./certificates/nltk_service.key,HIGH \
---processes 4 --threads 4 --wsgi-file app.py --pyargv "--admin_token=$TOKEN"
+    --processes 4 \
+    --threads 4 \
+    --wsgi-file app.py \
+    --pyargv "--admin_token=$TOKEN"
 ```
 
-### `Docker`
+### Docker
 
 ```shell script
 # Build the image
@@ -83,16 +87,17 @@ export PORT=[PORT]
 # Do not share the admin token access
 echo $TOKEN
 
-docker run --rm --name nltk_service -p $PORT:$PORT \
--v nltk_service:/opt/nltk_service/database \
--e PORT=$PORT -e TOKEN=$TOKEN \
-nltk_service:[VERSION]
+docker run --rm --name nltk_service 
+    -p $PORT:$PORT \
+    -v nltk_service:/opt/nltk_service/database \
+    -e PORT=$PORT -e TOKEN=$TOKEN \
+    nltk_service:[VERSION]
 
 # PS: To stop the container nltk_service open another shell and execute the command below:
 # docker container stop nltk_service
 ```
 
-### `Docker Composer`
+### Docker Composer
 
 ```shell script
 # Defining the parameters to run the service
@@ -108,21 +113,26 @@ docker-compose up
 # docker-compose rm
 ```
 
-### `Kubernetes`
+### Kubernetes
 
-#### Setup `Minikube`
+It's used `minikube` to simulate, locally, the Kubernetes environment.
+
+#### Start `minikube`
 
 ```shell script
-# Set minikube to work with local Docker daemon
-# Ensure to run this command on the terminal used to build the Docker image
-eval $(minikube docker-env)
-
-# Start minikube
 minikube start
 minikube dashboard
 ```
 
-#### Local deploy on `Minikube`
+#### Build Docker image to `minikube`
+```shell script
+# Set minikube to work with local Docker daemon
+eval $(minikube docker-env)
+
+docker build --tag=nltk_service:[VERSION] .
+```
+
+#### Local deploy on `minikube`
 ```shell script
 export NLTK_SERVICE_IMAGE=nltk_service:[VERSION]
 
@@ -134,31 +144,41 @@ export PORT=[PORT]
 echo $TOKEN
 
 cat kubernetes-statefulset.yaml | sed \
--e "s/\$\$PORT/$PORT/" \
--e "s/\$\$TOKEN/$TOKEN/" \
--e "s/\$\$NLTK_SERVICE_IMAGE/$NLTK_SERVICE_IMAGE/" | \
-kubectl create -f -
+    -e "s/\$\$PORT/$PORT/" \
+    -e "s/\$\$TOKEN/$TOKEN/" \
+    -e "s/\$\$NLTK_SERVICE_IMAGE/$NLTK_SERVICE_IMAGE/" | \
+    kubectl create -f -
+```
 
-# Evaluate the state of the deployment
+#### Evaluate the state of the deployment
+```shell script
 # TIP: It's possible to see the TOKEN when describe the deploy nltk_service as well
 kubectl describe statefulset.apps nltk-service 
-kubectl describe horizontalpodautoscaler nltk-service
 kubectl describe service nltk-service
 kubectl describe pvc nltk-service-pvc
 kubectl get pods
 
-# Get service IP.
+# Get service IP
 kubectl describe service nltk-service | grep 'LoadBalancer Ingress'
 
 # PS: How to delete the deployment
-# cat kubernetes-statefulset.yaml | sed \
-# -e "s/\$\$PORT/$PORT/" \
-# -e "s/\$\$TOKEN/$TOKEN/" \
-# -e "s/\$\$NLTK_SERVICE_IMAGE/$NLTK_service_IMAGE/" | \
-# kubectl delete -f -
+cat kubernetes-statefulset.yaml | sed \
+    -e "s/\$\$PORT/$PORT/" \
+    -e "s/\$\$TOKEN/$TOKEN/" \
+    -e "s/\$\$NLTK_SERVICE_IMAGE/$NLTK_SERVICE_IMAGE/" | \
+    kubectl delete -f -
 ```
 
-## How To Use
+#### Getting service external IP for `minikube` deployment
+> On cloud providers that support load balancers, an external IP address would be provisioned to access the Service. 
+> On Minikube, the LoadBalancer type makes the Service accessible through the minikube service command.
+> * [Hello Minikube - Kubernetes<](https://kubernetes.io/docs/tutorials/hello-minikube/)
+
+```shell script
+minikube service nltk-service
+```
+
+## How to use
 ```shell script
 python app.py --help
 usage: app.py [-h] [--port PORT] [--admin_token ADMIN_TOKEN]
@@ -177,7 +197,7 @@ optional arguments:
 #### Create
 ```shell script
 # Enabling --insecure once the certificate is self-signed
-$ curl --insecure \
+curl --insecure \
     --header 'Authorization: Bearer ca36c915cfb4ead0baa441f514f2983e' \
     --header 'Content-Type: plan/text' \
     --request POST \
@@ -194,7 +214,7 @@ $ curl --insecure \
 #### Read
 ```shell script
 # Enabling --insecure once the certificate is self-signed
-$ curl --insecure \
+curl --insecure \
     --header 'Authorization: Bearer ca36c915cfb4ead0baa441f514f2983e' \
     https://localhost:8443/admin/token?name=nltk_user_name
 
@@ -208,7 +228,7 @@ $ curl --insecure \
 #### Delete
 ```shell script
 # Enabling --insecure once the certificate is self-signed
-$ curl --insecure
+curl --insecure
     --header 'Authorization: Bearer ca36c915cfb4ead0baa441f514f2983e' \
     --request DELETE 
     https://localhost:8443/admin/token?token=9252b1021fcc97428cdd9d4e875f5a20
@@ -223,11 +243,11 @@ $ curl --insecure
 
 ```shell script
 # Enabling --insecure once the certificate is self-signed
-$ curl --insecure \
-	--header 'Authorization: Bearer 9252b1021fcc97428cdd9d4e875f5a20' \
-	--header 'Content-Type: application/json' \
-	--request POST \
-	-d '{"DOC1": "Python is a great programming language"}'    
+curl --insecure \
+    --header 'Authorization: Bearer 9252b1021fcc97428cdd9d4e875f5a20' \
+    --header 'Content-Type: application/json' \
+    --request POST \
+    -d '{"DOC1": "Python is a great programming language"}'    
     https://localhost:8443/words_tokenize
 
 # Output
@@ -238,8 +258,8 @@ $ curl --insecure \
 
 ```shell script
 # Enabling --insecure once the certificate is self-signed
-$ curl --insecure \
-	--header 'Authorization: Bearer 9252b1021fcc97428cdd9d4e875f5a20' \
+curl --insecure \
+    --header 'Authorization: Bearer 9252b1021fcc97428cdd9d4e875f5a20' \
     --header 'Content-Type: application/json' \
     --request POST \
     -d '{"DOC1":["Python","is","a","great","programming","language"]}' \
@@ -253,8 +273,8 @@ $ curl --insecure \
 
 ```shell script
 # Enabling --insecure once the certificate is self-signed
-$ curl --insecure \
-	--header 'Authorization: Bearer 9252b1021fcc97428cdd9d4e875f5a20' \
+curl --insecure \
+    --header 'Authorization: Bearer 9252b1021fcc97428cdd9d4e875f5a20' \
     --header 'Content-Type: application/json' \
     --request POST \
     -d '{"DOC1":[["Python","NNP"],["is","VBZ"],["a","DT"],["great","JJ"],["programming","NN"],["language","NN"]]}' \
@@ -268,8 +288,8 @@ $ curl --insecure \
 
 ```shell script
 # Enabling --insecure once the certificate is self-signed
-$ curl --insecure \
-	--header 'Authorization: Bearer 9252b1021fcc97428cdd9d4e875f5a20' \
+curl --insecure \
+    --header 'Authorization: Bearer 9252b1021fcc97428cdd9d4e875f5a20' \
     --header 'Content-Type: application/json' \
     --request POST \
     -d '{"DOC1":["Python","is","a","great","programming","language"]}' \
@@ -278,6 +298,3 @@ $ curl --insecure \
 # Output
 {"DOC1":["python","is","a","great","program","languag"]}
 ```
-
-## TODO
-* Fix local deployment into Minikube
