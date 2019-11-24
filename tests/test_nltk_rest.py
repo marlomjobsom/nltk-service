@@ -136,5 +136,37 @@ class RequestWordsSnowballStemmerTestCase(NltkRestTestCase):
         self.assertEqual(b'<h1>Authentication Required!</h1>', response.data)
 
 
+class RequestLemmatizerTestCase(NltkRestTestCase):
+
+    def setUp(self):
+        super(RequestLemmatizerTestCase, self).setUp()
+        self.url = '/lemmatize'
+        self.data = json.dumps({'DOC1': ['feet', 'children', 'coverages']})
+        self.expected_data = {'DOC1': ['foot', 'child', 'coverage']}
+
+    def test_words_lemmatize_status_ok(self):
+        response = self.flask_test_client.post(
+            self.url, headers=self.nltk_auth_header, data=self.data)
+        self.assertEqual(200, response.status_code)
+
+    def test_words_lemmatize_content_type(self):
+        response = self.flask_test_client.post(
+            self.url, headers=self.nltk_auth_header, data=self.data)
+        self.assertEqual(mime_types.APPLICATION_JSON, response.content_type)
+
+    def test_words_lemmatize_expected_content(self):
+        response = self.flask_test_client.post(
+            self.url, headers=self.nltk_auth_header, data=self.data)
+        self.assertEqual(self.expected_data, response.json)
+
+    def test_words_lemmatize_no_auth_status_code(self):
+        response = self.flask_test_client.post(self.url)
+        self.assertEqual(401, response.status_code)
+
+    def test_words_lemmatize_no_auth_content(self):
+        response = self.flask_test_client.post(self.url)
+        self.assertEqual(b'<h1>Authentication Required!</h1>', response.data)
+
+
 if __name__ == '__main__':
     unittest.main()
