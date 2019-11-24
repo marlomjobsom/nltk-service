@@ -136,10 +136,10 @@ class RequestWordsSnowballStemmerTestCase(NltkRestTestCase):
         self.assertEqual(b'<h1>Authentication Required!</h1>', response.data)
 
 
-class RequestWordsLemmatizerTestCase(NltkRestTestCase):
+class RequestLemmatizerTestCase(NltkRestTestCase):
 
     def setUp(self):
-        super(RequestWordsLemmatizerTestCase, self).setUp()
+        super(RequestLemmatizerTestCase, self).setUp()
         self.url = '/lemmatize'
         self.data = json.dumps({'DOC1': ['feet', 'children', 'coverages']})
         self.expected_data = {'DOC1': ['foot', 'child', 'coverage']}
