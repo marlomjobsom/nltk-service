@@ -9,3 +9,6 @@ venv
 *.pyc
 *.swp
 .coverage
+
+#mac
+.DS_Store

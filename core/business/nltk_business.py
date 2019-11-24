@@ -51,3 +51,12 @@ class NltkBusiness:
         """
         return nltk_wrapper.words_snowball_stemmer(
             words, ignore_stopwords=False, language=NltkBusiness.ENGLISH_LANG)
+
+    @staticmethod
+    def lemmatize(words):
+        """ Using NLTK's lemmatizer recommendation, returns a list of tagged tokens.
+                :param str tokens_content: Tokens in JSON with key pointing to a list of tokens.
+                                            e.g: {key1: [token1, token2], key2: [token3, token4], ...}
+                :return dict: the tagged tokens
+                """
+        return nltk_wrapper.lemmatize(words)
