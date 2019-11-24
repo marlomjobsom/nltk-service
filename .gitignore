@@ -4,7 +4,6 @@ __pycache__
 database
 test_coverage_report
 venv
-.DS_Store
 
 # files
 *.pyc

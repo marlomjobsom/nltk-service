@@ -51,12 +51,3 @@ class NltkRest:
         """
         words = request.data
         return NltkBusiness.words_snowball_stemmer(words)
-
-    @staticmethod
-    @rest_auth_nltk
-    def lemmatize():
-        """ Lemmatizes an English words and return the lemma form.
-        :return str: The words lemma form
-        """
-        words = request.data
-        return NltkBusiness.lemmatize(words)

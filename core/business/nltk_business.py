@@ -51,12 +51,3 @@ class NltkBusiness:
         """
         return nltk_wrapper.words_snowball_stemmer(
             words, ignore_stopwords=False, language=NltkBusiness.ENGLISH_LANG)
-
-    @staticmethod
-    def lemmatize(words):
-        """ Lemmatizes an English word and return the lemma format.
-                :param str words: Tokens in JSON with key pointing to a list of tokens.
-                                e.g: {key1: [token1, token2], key2: [token3, token4], ...}
-                :return dict: the lemmatized tokens
-                """
-        return nltk_wrapper.lemmatize(words)

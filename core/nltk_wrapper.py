@@ -8,7 +8,6 @@ NLTK wrapper
 import json
 
 import nltk
-from nltk.stem import WordNetLemmatizer
 
 
 def words_tokenize(texts_content, language='english'):
@@ -76,28 +75,6 @@ def words_snowball_stemmer(words, ignore_stopwords=False, language='english'):
 
         for word in words_list:
             stemmed_words_list.append(stemmer.stem(word=word))
-
-        dict_response[key] = stemmed_words_list
-
-    return dict_response
-
-
-def lemmatize(words):
-    """ Lemmatize an English sentence and return the lemmatized form.
-    :param str words: The words in JSON that are stemmed. e.g: {text1: [word1, word2, ...], ...}
-    :return dict: The words stemmed form
-    """
-    json_content = json.loads(words)
-    dict_response = dict()
-
-    lemmatizer = nltk.stem.WordNetLemmatizer()
-
-    for key in json_content:
-        words_list = json_content[key]
-        stemmed_words_list = list()
-
-        for word in words_list:
-            stemmed_words_list.append(lemmatizer.lemmatize(word=word))
 
         dict_response[key] = stemmed_words_list
 
