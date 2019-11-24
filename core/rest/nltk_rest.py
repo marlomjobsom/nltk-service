@@ -54,7 +54,7 @@ class NltkRest:
 
     @staticmethod
     @rest_auth_nltk
-    def words_lemmatize():
+    def lemmatize():
         """ Lemmatizes an English words and return the lemma form.
         :return str: The words lemma form
         """
