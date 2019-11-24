@@ -54,9 +54,9 @@ class NltkBusiness:
 
     @staticmethod
     def lemmatize(words):
-        """ Using NLTK's lemmatizer recommendation, returns a list of tagged tokens.
-                :param str tokens_content: Tokens in JSON with key pointing to a list of tokens.
-                                            e.g: {key1: [token1, token2], key2: [token3, token4], ...}
-                :return dict: the tagged tokens
+        """ Lemmatizes an English word and return the lemma format.
+                :param str words: Tokens in JSON with key pointing to a list of tokens.
+                                e.g: {key1: [token1, token2], key2: [token3, token4], ...}
+                :return dict: the lemmatized tokens
                 """
         return nltk_wrapper.lemmatize(words)
