@@ -140,7 +140,7 @@ class RequestWordsLemmatizerTestCase(NltkRestTestCase):
 
     def setUp(self):
         super(RequestWordsLemmatizerTestCase, self).setUp()
-        self.url = '/words_lemmatize'
+        self.url = '/lemmatize'
         self.data = json.dumps({'DOC1': ['feet', 'children', 'coverages']})
         self.expected_data = {'DOC1': ['foot', 'child', 'coverage']}
 
