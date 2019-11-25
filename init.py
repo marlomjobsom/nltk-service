@@ -46,6 +46,7 @@ def __set_nltk_end_points(flask_app_wrapper):
     """
     flask_app_wrapper.add_post_endpoint(['words_tokenize'], NltkRest.words_tokenize)
     flask_app_wrapper.add_post_endpoint(['words_snowball_stemmer'], NltkRest.words_snowball_stemmer)
+    flask_app_wrapper.add_post_endpoint(['lemmatize'], NltkRest.lemmatize)
     flask_app_wrapper.add_post_endpoint(['pos_tags'], NltkRest.pos_tags)
     flask_app_wrapper.add_post_endpoint(['ne_chunks'], NltkRest.ne_chunks)
 
