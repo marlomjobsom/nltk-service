@@ -83,8 +83,12 @@ def words_snowball_stemmer(words, ignore_stopwords=False, language='english'):
 
 
 def lemmatize(words):
-    """ Lemmatize an English sentence and return the lemmatized form.
-    :param str words: The words in JSON that are stemmed. e.g: {text1: [word1, word2, ...], ...}
+    """
+    Lemmatize using WordNet's built-in morphy function
+    >>> wnl = WordNetLemmatizer()
+    >>> print(wnl.lemmatize('dogs'))
+    dog
+    :param str words: The lemmatize words in JSON. e.g: {text1: [word1, word2, ...], ...}
     :return dict: The words stemmed form
     """
     json_content = json.loads(words)

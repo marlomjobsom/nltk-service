@@ -55,8 +55,8 @@ class NltkRest:
     @staticmethod
     @rest_auth_nltk
     def lemmatize():
-        """ Lemmatizes an English words and return the lemma form.
-        :return str: The words lemma form
+        """ Lemmatize using WordNet's built-in morphy function
+        :return dict: The words lemma form
         """
         words = request.data
         return NltkBusiness.lemmatize(words)

@@ -53,6 +53,9 @@ class NltkWrapperTestCase(unittest.TestCase):
         self.words = {'DOC1': ['brings', 'libraries', 'coverage']}
         self.stemmed_words = {'DOC1': ['bring', 'librari', 'coverag']}
 
+        self.lemmatize_data = {'DOC1': ['feet', 'children', 'coverages']}
+        self.expected_lemmatize_data = {'DOC1': ['foot', 'child', 'coverage']}
+
     def test_words_tokenize(self):
         texts_tokenized = nltk_wrapper.words_tokenize(json.dumps(self.json_text))
         self.assertEqual(self.text_words_list, texts_tokenized)
@@ -68,6 +71,10 @@ class NltkWrapperTestCase(unittest.TestCase):
     def test_words_snowball_stemmer(self):
         output = nltk_wrapper.words_snowball_stemmer(json.dumps(self.words))
         self.assertEqual(self.stemmed_words, output)
+
+    def test_lemmatize(self):
+        output = nltk_wrapper.lemmatize(json.dumps(self.lemmatize_data))
+        self.assertEqual(self.expected_lemmatize_data, output)
 
 
 if __name__ == '__main__':

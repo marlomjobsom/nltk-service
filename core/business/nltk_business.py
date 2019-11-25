@@ -54,9 +54,12 @@ class NltkBusiness:
 
     @staticmethod
     def lemmatize(words):
-        """ Lemmatizes an English word and return the lemma format.
-                :param str words: Tokens in JSON with key pointing to a list of tokens.
-                                e.g: {key1: [token1, token2], key2: [token3, token4], ...}
-                :return dict: the lemmatized tokens
-                """
+        """
+        Lemmatize using WordNet's built-in morphy function
+        >>> wnl = WordNetLemmatizer()
+        >>> print(wnl.lemmatize('dogs'))
+        dog
+        :param str words: The lemmatize words in JSON. e.g: {text1: [word1, word2, ...], ...}
+        :return dict: The words stemmed form
+        """
         return nltk_wrapper.lemmatize(words)
