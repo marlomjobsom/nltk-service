@@ -1,4 +1,4 @@
-# NLTK service
+# NLTK service [![Build Status](https://travis-ci.com/marlom-jobsom/nltk_rest_service.svg?branch=master)](https://travis-ci.com/marlom-jobsom/nltk_rest_service)
 It allows non-Python based projects to use NLTK python library.
 
 ## Requirements

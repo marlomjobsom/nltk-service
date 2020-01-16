@@ -113,13 +113,7 @@ class _EndpointHandler:
 
         try:
             output = self.__endpoint_handler(*args, **kwargs)
-
-            if isinstance(output, flask.Response):
-                # This response is built by the authentication decorator
-                response = output
-            else:
-                response = flask.jsonify(output)
-
+            response = flask.jsonify(output)
         except Exception as err:
             msg = err.args[0]
             response = flask.jsonify(dict(error=msg))

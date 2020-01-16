@@ -8,6 +8,8 @@ Validate requests
 import re
 from functools import wraps
 
+from core.exceptions.not_authenticated_request_exception import NotAuthenticatedRequestException
+
 import flask
 
 from core import settings
@@ -26,12 +28,10 @@ def rest_auth_admin(method):
         """
         :return function|flask.wrappers.Response:
         """
-        if __has_admin_token(flask.request):
-            response = method()
-        else:
-            response = __build_ask_authentication_response()
+        if not __has_admin_token(flask.request):
+            raise NotAuthenticatedRequestException(flask.request)
 
-        return response
+        return method()
 
     return parameters
 
@@ -49,12 +49,10 @@ def rest_auth_nltk(method):
         :param dict kwargs:
         :return function|flask.wrappers.Response:
         """
-        if __has_user_token(flask.request):
-            response = method(*args, **kwargs)
-        else:
-            response = __build_ask_authentication_response()
+        if not __has_user_token(flask.request):
+            raise NotAuthenticatedRequestException(flask.request)
 
-        return response
+        return method(*args, **kwargs)
 
     return parameters
 
