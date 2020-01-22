@@ -1,4 +1,8 @@
 [run]
+include=
+    core/*
+    utils/*
+
 omit =
     tests/*
     */site-packages/*

@@ -1,5 +1,9 @@
-# NLTK service [![Build Status](https://travis-ci.com/marlom-jobsom/nltk_rest_service.svg?branch=master)](https://travis-ci.com/marlom-jobsom/nltk_rest_service)
+# NLTK service 
 It allows non-Python based projects to use NLTK python library.
+
+[![Build Status](https://travis-ci.com/marlom-jobsom/nltk_rest_service.svg?branch=master)](https://travis-ci.com/marlom-jobsom/nltk_rest_service)
+[![codecov](https://codecov.io/gh/marlom-jobsom/nltk_rest_service/branch/master/graph/badge.svg)](https://codecov.io/gh/marlom-jobsom/nltk_rest_service)
+[![HitCount](http://hits.dwyl.io/marlom-jobsom/nltk_rest_service.svg)](http://hits.dwyl.io/marlom-jobsom/nltk_rest_service)
 
 ## Requirements
 * Python 3.7.4
