@@ -7,6 +7,8 @@ Flask app wrapper
 
 import flask
 
+from core.exceptions.not_authenticated_request_exception import NotAuthenticatedRequestException
+
 
 class FlaskAppWrapper:
     """
@@ -114,6 +116,10 @@ class _EndpointHandler:
         try:
             output = self.__endpoint_handler(*args, **kwargs)
             response = flask.jsonify(output)
+
+        except NotAuthenticatedRequestException:
+            response = flask.Response('<h1>Authentication Required!</h1>', 401)
+
         except Exception as err:
             msg = err.args[0]
             response = flask.jsonify(dict(error=msg))

@@ -8,12 +8,11 @@ Validate requests
 import re
 from functools import wraps
 
-from core.exceptions.not_authenticated_request_exception import NotAuthenticatedRequestException
-
 import flask
 
 from core import settings
 from core.business.user_business import UserBusiness
+from core.exceptions.not_authenticated_request_exception import NotAuthenticatedRequestException
 from core.persistence.exception.user_does_not_exist_exception import UserDoesNotExistException
 
 
@@ -28,9 +27,7 @@ def rest_auth_admin(method):
         """
         :return function|flask.wrappers.Response:
         """
-        if not __has_admin_token(flask.request):
-            raise NotAuthenticatedRequestException(flask.request)
-
+        __check_admin_token_auth(flask.request)
         return method()
 
     return parameters
@@ -49,34 +46,34 @@ def rest_auth_nltk(method):
         :param dict kwargs:
         :return function|flask.wrappers.Response:
         """
-        if not __has_user_token(flask.request):
-            raise NotAuthenticatedRequestException(flask.request)
-
+        __check_user_token_auth(flask.request)
         return method(*args, **kwargs)
 
     return parameters
 
 
-def __has_user_token(request):
+def __check_user_token_auth(request):
     """
     :param flask.wrappers.Response request:
-    :return bool:
+    :raise: NotAuthenticatedRequestException
     """
     token = __get_bearer_token(request)
 
     try:
         return bool(UserBusiness.read_by_token(token))
     except UserDoesNotExistException:
-        pass
+        raise NotAuthenticatedRequestException(request)
 
 
-def __has_admin_token(request):
+def __check_admin_token_auth(request):
     """
     :param flask.wrappers.Response request:
-    :return bool:
+    :raise: NotAuthenticatedRequestException
     """
     token = __get_bearer_token(request)
-    return settings.ADMIN_USER_TOKEN == token
+
+    if not settings.ADMIN_USER_TOKEN == token:
+        raise NotAuthenticatedRequestException(request)
 
 
 def __get_bearer_token(request):
@@ -92,10 +89,3 @@ def __get_bearer_token(request):
         if result:
             return result.group(1)
 
-
-def __build_ask_authentication_response():
-    """
-    :return flask.wrappers.Response:
-    """
-    return flask.Response(
-        '<h1>Authentication Required!</h1>', 401)
