@@ -3,7 +3,9 @@ It allows non-Python based projects to use NLTK python library.
 
 [![Build Status](https://travis-ci.com/marlom-jobsom/nltk_rest_service.svg?branch=master)](https://travis-ci.com/marlom-jobsom/nltk_rest_service)
 [![codecov](https://codecov.io/gh/marlom-jobsom/nltk_rest_service/branch/master/graph/badge.svg)](https://codecov.io/gh/marlom-jobsom/nltk_rest_service)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/d3bef647afbd487d876c5661d85c7459)](https://www.codacy.com/manual/marlomjobsom/nltk_rest_service?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=marlom-jobsom/nltk_rest_service&amp;utm_campaign=Badge_Grade)
 [![HitCount](http://hits.dwyl.io/marlom-jobsom/nltk_rest_service.svg)](http://hits.dwyl.io/marlom-jobsom/nltk_rest_service)
+
 
 ## Requirements
 * Python 3.7.4
