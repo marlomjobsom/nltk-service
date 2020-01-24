@@ -6,14 +6,13 @@ It allows non-Python based projects to use NLTK python library.
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/d3bef647afbd487d876c5661d85c7459)](https://www.codacy.com/manual/marlomjobsom/nltk_rest_service?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=marlom-jobsom/nltk_rest_service&amp;utm_campaign=Badge_Grade)
 [![HitCount](http://hits.dwyl.io/marlom-jobsom/nltk_rest_service.svg)](http://hits.dwyl.io/marlom-jobsom/nltk_rest_service)
 
-
 ## Requirements
-* Python 3.7.4
-* Docker
-* Docker Composer
-* VirtualBox
-* Kubectl
-* Minikube
+*   Python 3.7.4
+*   Docker
+*   Docker Composer
+*   VirtualBox
+*   Kubectl
+*   Minikube
 
 ## Development 
 
@@ -180,7 +179,7 @@ kubectl describe service nltk-service | grep 'LoadBalancer Ingress'
 > On cloud providers that support load balancers, an external IP address would be provisioned to access the Service. 
 > On Minikube, the LoadBalancer type makes the Service accessible through the minikube service command.
 >
-> * [Hello Minikube - Kubernetes](https://kubernetes.io/docs/tutorials/hello-minikube/)
+> *   [Hello Minikube - Kubernetes](https://kubernetes.io/docs/tutorials/hello-minikube/)
 
 ```shell script
 minikube service nltk-service
