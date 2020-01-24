@@ -2,7 +2,7 @@
 FROM python:3.7.4-buster
 
 # Copying files into container
-ADD . /opt/nltk_service
+COPY . /opt/nltk_service
 
 # Sets default folder path for triggers commands
 WORKDIR /opt/nltk_service/
